@@ -1,85 +1,77 @@
 /*
  * @file    snowflake_port.c
- * @brief   SnowFlack Èí¼ş°ü Port Ô´ÎÄ¼ş
+ * @brief   SnowFlack è½¯ä»¶åŒ… Port æºæ–‡ä»¶
  * @author  2022alpha
  * @version v0.1.0 
  * @date    2022-03-18
 */
 #include <rtthread.h>
-#include <stdint.h>
-#include "idgenerator.h"
-#include "yitidhelper.h"
 #include <sys/time.h>
+#include "IdGenerator.h"
 #include "snowflake_port.h"
 
-/**
- * @brief   Ñ©»¨Ëã·¨³õÊ¼»¯
- * @param   workerid »úÆ÷Âë
- * @param   method Ñ©»¨¼ÆËã·½Ê½
- * @param   worker_id_bit_length »úÆ÷ÂëÎ»³¤
- * @param   Seq_bit_length ĞòÁĞºÅÎ»³¤
- */
-void snowflake_init(uint32_t workerid, uint8_t method, uint8_t worker_id_bit_length, uint8_t Seq_bit_length)
-{
-    /* ´´½¨ IdGeneratorOptions ¶ÔÏó£¬ÔÚ¹¹Ôìº¯ÊıÖĞÊäÈë WorkerId */
-    IdGeneratorOptions options = BuildIdGenOptions(workerid);
+#ifdef USING_MULTITHREAD
+    rt_mutex_t snowflake_mux = RT_NULL;
+#endif
 
-    /* Ñ©»¨¼ÆËã·½·¨£¬£¨1 - Æ¯ÒÆËã·¨ | 2 - ´«Í³Ëã·¨£©*/
+/**
+ * @brief   é›ªèŠ±ç®—æ³•åˆå§‹åŒ–
+ * @param   workerId    æœºå™¨ç ï¼Œå¿…é¡»ç”±å¤–éƒ¨è®¾å®š
+ * @param   method      é›ªèŠ±è®¡ç®—æ–¹å¼ï¼ˆ1 - æ¼‚ç§»ç®—æ³• | 2 - ä¼ ç»Ÿç®—æ³•ï¼‰ï¼Œé»˜è®¤1 
+ * @param   wkIdLen     æœºå™¨ç ä½é•¿ï¼Œé»˜è®¤å€¼6ï¼Œå–å€¼èŒƒå›´ [1, 15]
+ * @param   seqLen      åºåˆ—æ•°ä½é•¿ï¼Œé»˜è®¤å€¼6ï¼Œå–å€¼èŒƒå›´ [3, 21]
+ * @param   drifts      æœ€å¤§æ¼‚ç§»æ¬¡æ•°ï¼ˆå«ï¼‰ï¼Œæ¨èèŒƒå›´ 500-20000ï¼ˆä¸è®¡ç®—èƒ½åŠ›æœ‰å…³ï¼‰ 
+ *                      ï¼ˆå˜é‡å–é»˜è®¤å€¼å¯è®¾ä¸º 0 ï¼‰
+ */
+void snowflake_init(uint32_t workerId, uint8_t method, uint8_t wkIdLen,
+                        uint8_t seqLen, uint32_t drifts)
+{
+    IdGeneratorOptions options = BuildIdGenOptions(workerId);
+
     if (method == 1 || method == 2)
     {
         options.Method = method;
     }
-    /* »úÆ÷ÂëÎ»³¤£¬Ä¬ÈÏÖµ6£¬È¡Öµ·¶Î§ [1, 15] */
-    if (worker_id_bit_length >= 1 && worker_id_bit_length <= 15)
+
+    if (wkIdLen >= 1 && wkIdLen <= 15)
     {
-        options.WorkerIdBitLength = worker_id_bit_length;
-    }
-    /* ĞòÁĞÊıÎ»³¤£¬Ä¬ÈÏÖµ6£¬È¡Öµ·¶Î§ [3, 21] */
-    if (Seq_bit_length >= 3 && Seq_bit_length <= 21)
-    {
-        options.SeqBitLength = Seq_bit_length;
+        options.WorkerIdBitLength = wkIdLen;
     }
 
-    /* ±£´æ²ÎÊı */
+    if (seqLen >= 3 && seqLen <= 21)
+    {
+        options.SeqBitLength = seqLen;
+    }
+
+    //options.TopOverCostCount = drifts;
+
     SetIdGenerator(options);
+
+#ifdef USING_MULTITHREAD
+    snowflake_mux = rt_mutex_create("snowflake_mux", RT_IPC_FLAG_PRIO);
+#endif
 }
 
-/**
- * @brief   Éú³ÉÈ«¾Ö ID
- * @return  ID
- */
 uint64_t snowflake_get_id(void)
 {
-    /* ĞèÒªÉú³ÉID£¬µ÷ÓÃ NextId ·½·¨*/
     return NextId();
 }
 
-uint32_t * snowflake_malloc(uint32_t size)
-{
-    uint32_t * ptr;
-    ptr = rt_malloc(size);
-    return ptr;
-}
-
+#ifdef USING_MULTITHREAD
 void snowflake_lock(void)
 {
-    // rtthread
-    //µ¥»úÔËĞĞ¿É²»¿¼ÂÇ
+    rt_mutex_take(snowflake_mux, RT_WAITING_FOREVER);
 }
 
 void snowflake_unlock(void)
 {
-    // rtthread
-    //µ¥»úÔËĞĞ¿É²»¿¼ÂÇ
+    rt_mutex_release(snowflake_mux);
 }
+#endif
 
-/**
- * @brief   »ñÈ¡µ±Ç°Ê±¼ä£¬¹©Ëã·¨Ê¹ÓÃ
- * @return  µ±Ç°Ê±¼ä
- */
-uint64_t GetSystemCurrentMicroTime(void)
+extern int64_t GetSystemCurrentMicroTime(void)
 {
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    return ((uint64_t)tv.tv_sec * 1000000 + tv.tv_usec);
+    return ((int64_t)tv.tv_sec * 1000000 + tv.tv_usec);
  }

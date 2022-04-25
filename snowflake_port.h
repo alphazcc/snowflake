@@ -1,6 +1,6 @@
 /*
  * @file    snowflake_port.h
- * @brief   SnowFlack Èí¼þ°ü Port Í·ÎÄ¼þ
+ * @brief   SnowFlack è½¯ä»¶åŒ… Port å¤´æ–‡ä»¶
  * @author  2022alpha
  * @version v0.1.0 
  * @date    2022-03-18
@@ -12,18 +12,27 @@
 extern "C" {
 #endif
 
+#include <rtthread.h>
 #include <stdint.h>
+#include "snowflake.h"
 
-uint32_t* snowflake_malloc(uint32_t size);
+#ifdef USING_MULTITHREAD
+#define SNOWFLAKE_LOCK		snowflake_lock()
+#define SNOWFLAKE_UNLOCK	snowflake_unlock()
+#else
+#define SNOWFLAKE_LOCK
+#define SNOWFLAKE_UNLOCK
+#endif
+
+#define SNOWFLAKE_MALLOC	rt_malloc
+#define SNOWFLAKE_FREE		rt_free
+
 void snowflake_lock(void);
 void snowflake_unlock(void);
-void snowflake_init(uint32_t workerid, uint8_t method, uint8_t worker_id_bit_length, uint8_t Seq_bit_length);
-uint64_t snowflake_get_id(void);
-uint64_t GetSystemCurrentMicroTime(void);
+extern int64_t GetSystemCurrentMicroTime(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // !__SMOWFLAKE_PORT_H__
-
+#endif

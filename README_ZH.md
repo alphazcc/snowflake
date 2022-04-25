@@ -14,16 +14,6 @@ SnowFlake 软件包是 RT-Thread 基于开源雪花算法而制作的一款实�
 
 - 不能出现重复的ID号，既然是唯一标识，这是最基本的要求。
 
-SnowFlake 软件包功能特点如下：
-
-- 整形数字，随时间单调递增（不一定连续）;
-
-- 集合了两种雪花计方式，传统雪花算法和优化的雪花算法（雪花漂移）；
-
-- 雪花漂移算法，它生成的ID更短、速度更快；
-
-- 雪花漂移支持时间回拨处理，比如服务器时间回拨1秒，本算法能自动适应生成临界时间的唯一ID。
-
 更多软件包介绍请查看 [详细介绍](docs/introduction.md)。
 
 ### 1.1 目录结构
@@ -32,22 +22,25 @@ SnowFlake 软件包目录结构如下所示：
 
 ```shell
 snowflake
-+---docs 
-│   +---figures                     // 文档使用图片
+├───docs 
+│   ├───figures                     // 文档使用图片
 │   │   api.md                      // API 使用说明
 │   │   introduction.md             // 介绍文档
 │   │   principle.md                // 实现原理
 │   │   README.md                   // 文档结构说明
 │   │   samples.md                  // 软件包示例
 │   │   user-guide.md               // 使用说明
-│   +---version.md                  // 版本
-+---inc                             // 头文件
-+---src                             // 源文件
-+---samples                         // 示例代码
-│   │   snowflake_sample        	// 获取 ID 示例代码
+│   └───version.md                  // 版本
+├───inc                             // 头文件
+├───samples                         // 示例代码
+│   └───snowflake_sample        	// 获取 ID 示例代码
+├───src                             // 源文件
 │   LICENSE                         // 软件包许可证
 │   README.md                       // 软件包使用说明
-+---SConscript                      // RT-Thread 默认的构建脚本
+│   SConscript                      // RT-Thread 默认的构建脚本
+│   snowflake.h                     // snowflake 头文件 
+│   snowflake_port.c                // snowflake_port 源文件
+└───snowflake_port.h                // snowflake_port 头文件
 ```
 
 ### 1.2 许可证
@@ -70,13 +63,9 @@ RT-Thread online packages
               Version (latest)  --->
 ```
 
-注：使用 SnowFlake 需要依赖 RTC，需要先开启 RTC 功能，若直接选中 SnowFlake 则会默认开启 RTC。
-
-配置完成后让 RT-Thread 的包管理器自动更新，或者使用 pkgs --update 命令更新包到 BSP 中。
-
 ## 3、使用 SnowFlake 软件包
 
-- 软件包详细介绍，请参考 [软件包介绍](docs/introduction.md)
+- 软件包详细介绍，请参考 [详细介绍](docs/introduction.md)
 
 - 详细的示例介绍，请参考 [示例文档](docs/samples.md) 
 
@@ -90,10 +79,12 @@ RT-Thread online packages
 
 ## 4、注意事项
 
-若需要进行配置变更，请务必遵循**详细介绍**中配置变更注意事项。
+若需要进行配置变更，请务必遵循**详细介绍**中**配置变更**注意事项。
 
 ## 5、联系方式 & 感谢
 
 - 维护：2022alpha
-
-- 主页：
+  
+- 主页：https://github.com/2022alpha/snowflake
+  
+- 开源地址：https://github.com/yitter/IdGenerator

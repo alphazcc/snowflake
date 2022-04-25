@@ -1,12 +1,12 @@
 # 示例程序
 
-SnowFlake 软件包提供一个 获取 ID 示例程序, 分别用于演示软件包获取 ID 功能。
+SnowFlake 软件包提供一个 获取 ID 示例程序, 用于演示使用软件包获取 ID 功能。
 
 **示例文件**
 
-| 示例程序路径                                   | 说明  |
-| ----                                          | ---- |
-| samples/snowflake_sample.c                | 获取 5000 个 ID |
+| 示例程序路径                 | 说明  |
+| ----                         | ----- |
+| samples/snowflake_sample.c   | 获取 5000 个 ID |
 
 ## 准备工作
 
@@ -28,6 +28,6 @@ RT-Thread online packages
 
 - 使用 `pkgs --update` 命令下载软件包
 
-- 编译下载
+## 运行示例
 
-### 调用 snowflake_sample.c 文件中 smowflake_sample 函数
+- 调用 `snowflake_sample` 函数或使用 `Finsh` 组件运行程序。

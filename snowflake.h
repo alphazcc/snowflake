@@ -1,6 +1,6 @@
 /*
  * @file    snowflake.h
- * @brief   SnowFlack Èí¼þ°ü API ÎÄ¼þ
+ * @brief   SnowFlack è½¯ä»¶åŒ… API æ–‡ä»¶
  * @author  2022alpha
  * @version v0.1.0
  * @date    2022-03-18
@@ -8,9 +8,20 @@
 #ifndef __SNOWFLAKE_H__
 #define __SNOWFLAKE_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdint.h>
 
-void snowflake_init(uint32_t workerid, uint8_t method, uint8_t worker_id_bit_length, uint8_t Seq_bit_length);
+#define USING_MULTITHREAD
+
+void snowflake_init(uint32_t workerId, uint8_t method, uint8_t wkIdLen,
+                    uint8_t seqLen, uint32_t drifts);
 uint64_t snowflake_get_id(void);
 
-#endif // !__SNOWFLAKE_H__
+#ifdef __cplusplus
+}
+#endif
+
+#endif

@@ -1,9 +1,7 @@
 //
 // Created by zhouzj on 2021/3/28.
 //
-
-#ifndef __COMMON_H__
-#define __COMMON_H__
+#pragma once
 
 #ifdef _WIN32
 #define TAP_CDECL  __cdecl
@@ -15,4 +13,3 @@
 #define TAP_DLLEXPORT
 #endif
 
-#endif // !__COMMON_H__

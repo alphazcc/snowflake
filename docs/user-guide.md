@@ -17,7 +17,7 @@ RT-Thread Components →
         [ ]   Using software simulation RTC device
 ```
 
-然后下载 SnowFlake 软件包，并将软件包加入到项目中。在 BSP 目录下使用 menuconfig 命令打开 env 配置界面，在 `RT-Thread online packages → tools packages` 中选择 SnowFlake 软件包，操作界面如下图所示：
+然后下载 SnowFlake 软件包，并将软件包加入到项目中。在工程目录下打开 env 工具，使用 menuconfig 命令打开配置界面，在 `RT-Thread online packages → tools packages` 中选择 SnowFlake 软件包，操作界面如下图所示：
 
 ![SnowFlake 软件包配置](figures/Snowflake_cfg.jpg)
 
@@ -33,7 +33,8 @@ RT-Thread online packages
 
 **Enable snowflake samples** ：添加示例代码；
 
-**Version** ：配置软件包版本号。
+**Version** ：配置软件包版本。
 
-选择合适的配置项后，使用 `pkgs --update` 命令下载软件包并更新用户配置。
+配置完成后，让 RT-Thread 的包管理器自动更新，或使用 `pkgs --update` 命令将软件包更新包到 packages 中。
 
+注：使用 SnowFlake 需要依赖 RTC，需要先开启 RTC 功能，若直接选中 SnowFlake 则会自动开启 RTC。

@@ -4,19 +4,12 @@
  * 代码修订：yitter
  * 开源地址：https://gitee.com/yitter/idgenerator
  */
-#ifndef __SNOWFLAKE_M1_H__
-#define __SNOWFLAKE_M1_H__
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#pragma once
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "snowflake_port.h"
 
-typedef struct SnowFlakeWorker
-{
+typedef struct SnowFlakeWorker {
     uint8_t Method;
     uint64_t BaseTime;
     uint32_t WorkerId;
@@ -29,7 +22,7 @@ typedef struct SnowFlakeWorker
     uint8_t _TimestampShift;
     uint32_t _CurrentSeqNumber;
     uint64_t _LastTimeTick;
-    uint64_t _TurnBackTimeTick;
+    int64_t _TurnBackTimeTick;
     uint8_t _TurnBackIndex;
     bool _IsOverCost;
     uint32_t _OverCostCountInOneTerm;
@@ -38,20 +31,14 @@ typedef struct SnowFlakeWorker
 
 } SnowFlakeWorker;
 
-extern SnowFlakeWorker* NewSnowFlakeWorker();
+extern SnowFlakeWorker *NewSnowFlakeWorker();
 
-extern uint64_t WorkerM1NextId(SnowFlakeWorker* worker);
+extern uint64_t WorkerM1NextId(SnowFlakeWorker *worker);
 
-extern uint64_t uGetCurrentTimeTick(SnowFlakeWorker* worker);
+extern uint64_t GetCurrentTimeTick(SnowFlakeWorker *worker);
 
-extern uint64_t uGetNextTimeTick(SnowFlakeWorker* worker);
+extern uint64_t GetNextTimeTick(SnowFlakeWorker *worker);
 
-extern uint64_t uGetCurrentTime();
+extern uint64_t GetCurrentTime();
 
-extern uint64_t uGetCurrentMicroTime();
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif // !__SNOWFLAKE_M1_H__
+extern uint64_t GetCurrentMicroTime();

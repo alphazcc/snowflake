@@ -14,16 +14,6 @@ Mandatory requirements for the distributed ID generation rule:
 
 - It is essential that no duplicate ID numbers appear, since they are unique.
 
-The SnowFlake software package has the following features:
-
-- Integer number, monotonically increasing over time (not necessarily continuous);
-
-- There are two kinds of snowmeter methods, traditional snowflake algorithm and optimized snowflake algorithm (snowflake drift);
-
-- Snowflake drift algorithm, which generates shorter and faster ids;
-
-- Snowflake drift supports time callback processing, for example, the server time callback is 1 second. This algorithm can automatically adapt to the unique ID of the critical time.
-
 For more software package introduction, please refer to [Detailed introduction](docs/introduction.md).
 
 ### 1.1 Directory structure
@@ -33,7 +23,7 @@ The directory structure of the SnowFlake software package is as follows:
 ```
 SnowFlake
 ├───docs 
-│   └───figures                   // Documents use pictures
+│   ├───figures                   // Documents use pictures
 │   │   api.md                    // API instructions
 │   │   introduction.md           // Introduction document
 │   │   principle.md              // Implementation principle
@@ -42,12 +32,15 @@ SnowFlake
 │   │   user-guide.md             // Instructions
 │   └───version.md                // version
 ├───inc                           // header file
-├───src                           // source file
 ├───samples                       // sample code
-│   │   snowflake_sample          // gets the ID sample code
+│   └───snowflake_sample          // gets the ID sample code
+├───src                           // source file
 │   LICENSE                       // package license
 │   README.md                     // Software package instructions
-└───SConscript                    // RT-Thread default build script
+│   SConscript                    // RT-Thread default build script
+│   snowflake.h                   // snowflake header file
+│   snowflake_port.c              // snowflake_port source file
+└───snowflake_port.h              // snowflake_port header file
 ```
 
 ### 1.2 License
@@ -70,13 +63,9 @@ RT-Thread online packages
               Version (latest)  --->
 ```
 
-Note: To use SnowFlake, you need to enable the RTC function. If you select SnowFlake, the RTC function is enabled by default.
-
-After the configuration is complete, let the RT-Thread package manager automatically update, or use the pkgs --update command to update the package to the BSP.
-
 ## 3. Use SnowFlake software package
 
-- For detailed description of the software package, please refer to [Package Introduction](docs/introduction.md)
+- For detailed description of the software package, please refer to [Introduction](docs/introduction.md)
 
 - For detailed sample introduction, please refer to [Sample Document](docs/samples.md) 
 
@@ -90,10 +79,12 @@ After the configuration is complete, let the RT-Thread package manager automatic
 
 ## 4. Matters needing attention
 
-Note If you need to change the configuration, follow the precautions in ** introduction **
+Note If you need to change the configuration, follow the **precautions** in **introduction**
 
 ## 5. Contact & Thanks
 
 - Maintenance: 2022alpha
 
-- Homepage: 
+- Homepage: https://github.com/2022alpha/snowflake
+  
+- Open Source Address: https://github.com/yitter/IdGenerator
