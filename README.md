@@ -85,6 +85,6 @@ Note If you need to change the configuration, follow the **precautions** in **in
 
 - Maintenance: 2022alpha
 
-- Homepage: https://github.com/2022alpha/snowflake
+- Homepage: https://github.com/alphazcc/snowflake
   
 - Open Source Address: https://github.com/yitter/IdGenerator

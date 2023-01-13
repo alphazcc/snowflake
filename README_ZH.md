@@ -85,6 +85,6 @@ RT-Thread online packages
 
 - 维护：2022alpha
   
-- 主页：https://github.com/2022alpha/snowflake
+- 主页：https://github.com/alphazcc/snowflake
   
 - 开源地址：https://github.com/yitter/IdGenerator
